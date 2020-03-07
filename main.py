@@ -21,7 +21,7 @@ def main(stdscr):
     curses.cbreak()
     curses.curs_set(0)
     stdscr.keypad(True)
-    stdscr.timeout(125)  # adjust for difficulty
+    stdscr.timeout(500)  # adjust for difficulty
 
     max_y, max_x = stdscr.getmaxyx()
     game = state.GameState(max_y, max_x)
@@ -39,10 +39,10 @@ def main(stdscr):
             score = game.get_score()
 
             for sneklet in snek.get_body():
-                char = '@'
+                char = 'O'
                 y, x = sneklet.get_position()
                 if (y, x) == (head_y, head_x):
-                    char = DIRECTIONS.get(game.get_last_key(), '@')
+                    char = DIRECTIONS.get(game.get_last_key(), 'O')
                 stdscr.addstr(y, x, char)
             
             stdscr.addstr(food_y, food_x, '*')
@@ -61,7 +61,7 @@ def main(stdscr):
             stdscr.clear()
             stdscr.refresh()
             stdscr.border()
-            stdscr.addstr(1, 1, 'game over snek')
+            stdscr.addstr(1, 1, 'game over snek: {}'.format(e))
             stdscr.addstr(2, 2, 'score: {}'.format(game.get_score()))
             stdscr.getch()
             sys.exit(0)

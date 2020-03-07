@@ -14,6 +14,8 @@ class GameState:
         self.snek = sss.Snek(max_y//2, max_x//2)
         self.food_pos = helpers.generate_random_food_position(max_y-1, max_x-1)
         self.last_key = choice([KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN])
+
+        self.border_coords = helpers.get_border_coordinates(self.max_y, self.max_x)
     
     def get_snek(self):
         return self.snek
@@ -27,6 +29,7 @@ class GameState:
     def generate_new_food_position(self):
         new_food_pos = helpers.generate_random_food_position(self.max_y-1, self.max_x-1)
         snek_coords = self.snek.get_illegal_moves()
+        snek_coords.add(self.snek.get_tail().get_position())
 
         # do not generate food inside a snek
         while new_food_pos in snek_coords:
@@ -49,12 +52,9 @@ class GameState:
 
         next_pos = helpers.get_next_position(cur_y, cur_x, key)
 
-        border_coords = helpers.get_border_coordinates(self.max_y, self.max_x)
-        snek_coords = self.snek.get_illegal_moves()
-
-        if next_pos in border_coords:
+        if next_pos in self.border_coords:
             raise GameOver('ran into the wall')
-        elif next_pos in snek_coords:
+        elif next_pos in self.snek.get_illegal_moves():
             raise GameOver('snek ate itself')
         else:
             if next_pos == self.food_pos:

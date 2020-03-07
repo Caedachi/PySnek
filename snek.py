@@ -1,46 +1,37 @@
 class Snek:
     def __init__(self, start_y, start_x):
-        self.head = Sneklet(start_y, start_x, 1)
+        self.head = Sneklet(start_y, start_x)
         self.body = [self.head]
     
     def consume_food(self, y, x):
-        self.head = Sneklet(y, x, len(self.body) + 1)
-        self.body.append(self.head)
+        self._extend_snek(y, x)
     
     def move(self, y, x):
-        self.head = Sneklet(y, x, len(self.body))
-        self.tick()
+        self.body.pop(0)
+        self._extend_snek(y, x)
+    
+    def _extend_snek(self, y, x):
+        self.head = Sneklet(y, x)
         self.body.append(self.head)
 
     def get_head(self):
-        return self.head 
+        return self.head
 
     def get_body(self):
         return self.body
 
-    def get_illegal_moves(self):
-        return set([_.get_position() for _ in self.get_body()])
+    def get_tail(self):
+        return self.body[0]
 
-    def tick(self):
-        for sneklet in self.body:
-            sneklet.tick()
-        
-        for i, sneklet in enumerate(self.body):
-            if sneklet.get_remaining_ticks() == 0:
-                self.body.pop(i)
+    def get_illegal_moves(self):
+        # omit the tail of the body to allow nipping at the tail
+        return set([_.get_position() for _ in self.get_body()[1:]])
 
 
 class Sneklet:
-    def __init__(self, y, x, ticks):
+    def __init__(self, y, x):
         self.y = y
         self.x = x
-        self.ticks = ticks
 
     def get_position(self):
         return (self.y, self.x)
-
-    def get_remaining_ticks(self):
-        return self.ticks
-
-    def tick(self):
-        self.ticks -= 1
