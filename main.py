@@ -21,7 +21,7 @@ def main(stdscr):
     curses.cbreak()
     curses.curs_set(0)
     stdscr.keypad(True)
-    stdscr.timeout(125)
+    stdscr.timeout(125)  # adjust for difficulty
 
     max_y, max_x = stdscr.getmaxyx()
     game = state.GameState(max_y, max_x)
@@ -52,9 +52,6 @@ def main(stdscr):
 
             if key == curses.KEY_RESIZE:
                 continue
-            elif key == ord('f'):
-                head_x += 1
-                snek.consume_food(head_y, head_x)
             elif key == ord('q'):
                 break
             else:

@@ -5,6 +5,7 @@ from exceptions import GameOver, GameError
 import helpers
 import snek as sss
 
+
 class GameState:
     def __init__(self, max_y, max_x):
         self.score = 0
@@ -33,22 +34,17 @@ class GameState:
         
         self.food_pos = new_food_pos
 
-    def evaluate_state(self):
-        pass
-
     def get_last_key(self):
         return self.last_key
 
     def next_state(self, key):
         cur_y, cur_x = self.snek.get_head().get_position()
 
-        if (key == -1):
-            key = self.last_key
-
-        if (self.last_key == KEY_LEFT and key == KEY_RIGHT) or \
-            (self.last_key == KEY_RIGHT and key == KEY_LEFT) or \
-            (self.last_key == KEY_UP and key == KEY_DOWN) or \
-            (self.last_key == KEY_DOWN and key == KEY_UP):
+        if ((key == -1) or
+            (self.last_key == KEY_LEFT and key == KEY_RIGHT) or
+            (self.last_key == KEY_RIGHT and key == KEY_LEFT) or
+            (self.last_key == KEY_UP and key == KEY_DOWN) or
+            (self.last_key == KEY_DOWN and key == KEY_UP)):
             key = self.last_key
 
         next_pos = helpers.get_next_position(cur_y, cur_x, key)
