@@ -7,7 +7,7 @@ import snek as sss
 
 
 class GameState:
-    def __init__(self, max_y, max_x):
+    def __init__(self, max_y: int, max_x: int):
         self.score = 0
         self.max_y = max_y
         self.max_x = max_x
@@ -16,6 +16,8 @@ class GameState:
         self.last_key = choice([KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN])
 
         self.border_coords = helpers.get_border_coordinates(self.max_y, self.max_x)
+        gameboard = helpers.get_gameboard_coordinates(self.max_y, self.max_x)
+        self.playable_area = helpers.get_playable_area(self.border_coords, gameboard)
     
     def get_snek(self):
         return self.snek
@@ -27,15 +29,10 @@ class GameState:
         return self.food_pos
     
     def generate_new_food_position(self):
-        new_food_pos = helpers.generate_random_food_position(self.max_y-1, self.max_x-1)
         snek_coords = self.snek.get_illegal_moves()
         snek_coords.add(self.snek.get_tail().get_position())
-
-        # do not generate food inside a snek
-        while new_food_pos in snek_coords:
-            new_food_pos = helpers.generate_random_food_position(self.max_y-1, self.max_x-1)
         
-        self.food_pos = new_food_pos
+        self.food_pos = helpers.get_random_food_position(self.playable_area, snek_coords)
 
     def get_last_key(self):
         return self.last_key

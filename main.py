@@ -1,4 +1,3 @@
-
 from random import choice
 import curses
 import sys
@@ -21,7 +20,7 @@ def main(stdscr):
     curses.cbreak()
     curses.curs_set(0)
     stdscr.keypad(True)
-    stdscr.timeout(500)  # adjust for difficulty
+    stdscr.timeout(400)  # adjust for difficulty
 
     max_y, max_x = stdscr.getmaxyx()
     game = state.GameState(max_y, max_x)
@@ -45,7 +44,7 @@ def main(stdscr):
                     char = DIRECTIONS.get(game.get_last_key(), 'O')
                 stdscr.addstr(y, x, char)
             
-            stdscr.addstr(food_y, food_x, '*')
+            stdscr.addstr(food_y, food_x, '@')
             stdscr.addstr(0, 1, str(score))
 
             key = stdscr.getch()
