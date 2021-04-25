@@ -12,12 +12,13 @@ class GameState:
         self.max_y = max_y
         self.max_x = max_x
         self.snek = sss.Snek(max_y//2, max_x//2)
-        self.food_pos = helpers.generate_random_food_position(max_y-1, max_x-1)
         self.last_key = choice([KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN])
 
         self.border_coords = helpers.get_border_coordinates(self.max_y, self.max_x)
         gameboard = helpers.get_gameboard_coordinates(self.max_y, self.max_x)
         self.playable_area = helpers.get_playable_area(self.border_coords, gameboard)
+
+        self.food_pos = helpers.get_random_food_position(self.playable_area, self.snek.get_illegal_moves())
     
     def get_snek(self):
         return self.snek
