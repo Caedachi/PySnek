@@ -8,11 +8,12 @@ import snek as sss
 import state
 
 
-DIRECTIONS = {}
-DIRECTIONS[curses.KEY_LEFT] = '<'
-DIRECTIONS[curses.KEY_RIGHT] = '>'
-DIRECTIONS[curses.KEY_UP] = '^'
-DIRECTIONS[curses.KEY_DOWN] = 'v'
+DIRECTIONS = {
+    curses.KEY_LEFT: "<",
+    curses.KEY_RIGHT: ">",
+    curses.KEY_UP: "^",
+    curses.KEY_DOWN: "v"
+}
 
 
 def main(stdscr):
@@ -20,7 +21,7 @@ def main(stdscr):
     curses.cbreak()
     curses.curs_set(0)
     stdscr.keypad(True)
-    stdscr.timeout(400)  # adjust for difficulty
+    stdscr.timeout(100)  # adjust for difficulty
 
     max_y, max_x = stdscr.getmaxyx()
     game = state.GameState(max_y, max_x)
@@ -43,7 +44,6 @@ def main(stdscr):
                 if (y, x) == (head_y, head_x):
                     char = DIRECTIONS.get(game.get_last_key(), 'O')
                 stdscr.addstr(y, x, char)
-            
             stdscr.addstr(food_y, food_x, '@')
             stdscr.addstr(0, 1, str(score))
 

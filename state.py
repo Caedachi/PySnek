@@ -20,13 +20,13 @@ class GameState:
 
         self.food_pos = helpers.get_random_food_position(self.playable_area, self.snek.get_illegal_moves())
     
-    def get_snek(self):
+    def get_snek(self) -> sss.Snek:
         return self.snek
     
-    def get_score(self):
+    def get_score(self) -> int:
         return self.score
     
-    def get_food_position(self):
+    def get_food_position(self) -> tuple[int, int]:
         return self.food_pos
     
     def generate_new_food_position(self):
@@ -35,18 +35,13 @@ class GameState:
         
         self.food_pos = helpers.get_random_food_position(self.playable_area, snek_coords)
 
-    def get_last_key(self):
+    def get_last_key(self) -> int:
         return self.last_key
 
     def next_state(self, key):
         cur_y, cur_x = self.snek.get_head().get_position()
 
-        if ((key == -1) or
-            (self.last_key == KEY_LEFT and key == KEY_RIGHT) or
-            (self.last_key == KEY_RIGHT and key == KEY_LEFT) or
-            (self.last_key == KEY_UP and key == KEY_DOWN) or
-            (self.last_key == KEY_DOWN and key == KEY_UP)):
-            key = self.last_key
+        key = check_next_key(key, self.last_key)
 
         next_pos = helpers.get_next_position(cur_y, cur_x, key)
 
@@ -63,3 +58,28 @@ class GameState:
                 self.snek.move(*next_pos)
     
         self.last_key = key
+
+
+def check_next_key(key: str, last_key: str) -> str:
+    """Checks a key against the last key pressed.
+
+    Specifically, this function prevents a player from attempting to move
+    in the opposite direction of a snek's current direction of travel.
+    This function also handles ignoring any other invalid keys entered,
+    defaulting to the last key pressed.
+
+    Args:
+        key: the key to check
+        last_key: the last pressed key
+
+    Returns:
+        Returns either the same key or the last key.
+    """
+    invalid_move = key not in (-1, KEY_LEFT, KEY_RIGHT, KEY_DOWN, KEY_UP)
+    invalid_move |= key == -1
+    invalid_move |= last_key == KEY_LEFT and key == KEY_RIGHT
+    invalid_move |= last_key == KEY_RIGHT and key == KEY_LEFT
+    invalid_move |= last_key == KEY_UP and key == KEY_DOWN
+    invalid_move |= last_key == KEY_DOWN and key == KEY_UP
+
+    return last_key if invalid_move else key
