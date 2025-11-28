@@ -52,7 +52,7 @@ def main(stdscr):
             if key == curses.KEY_RESIZE:
                 continue
             elif key == ord('q'):
-                break
+                raise GameOver("u quit") 
             else:
                 game.next_state(key)
         except GameOver as e:
